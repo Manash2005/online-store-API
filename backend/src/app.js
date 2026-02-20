@@ -1,11 +1,29 @@
 const express = require("express")
 const cors = require("cors")
+const morgan = require("morgan")
 
 const app = express()
 
 //Built-in Middlewares
 app.use(express.json()) 
 app.use(cors())
+app.use(morgan("dev"))
+
+
+
+app.use((req,res,next) => {
+
+    console.log("Page not Found".red)
+
+    res.status(404).json({
+        message : "Page Not Found"
+    })
+})
+
+app.use((err, req, res, next) => {
+  console.error(err)
+  res.status(err.status || 500).json({ message: err.message || "Server Error" })
+})
 
 
 module.exports = app
