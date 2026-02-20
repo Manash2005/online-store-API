@@ -9,6 +9,13 @@ app.use(express.json())
 app.use(cors())
 app.use(morgan("dev"))
 
+app.get('/api/home', (req, res) => {
+    res.status(200).json({
+        title : "Welcome to my shop",
+        description : "We serve for you not for us"
+    })
+})
+
 
 
 app.use((req,res,next) => {
