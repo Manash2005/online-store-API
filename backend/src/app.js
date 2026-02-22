@@ -1,6 +1,7 @@
 const express = require("express")
 const cors = require("cors")
 const morgan = require("morgan")
+const authRoutes = require("./routes/auth.route")
 
 const app = express()
 
@@ -9,12 +10,13 @@ app.use(express.json())
 app.use(cors())
 app.use(morgan("dev"))
 
-app.get('/api/home', (req, res) => {
+app.get('/api/', (req, res) => {
     res.status(200).json({
         title : "Welcome to my shop",
         description : "We serve for you not for us"
     })
 })
+app.use('/api', authRoutes)
 
 
 

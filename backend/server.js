@@ -23,12 +23,12 @@ async function start() {
 }
 
 const shutdown = async () => {
-    console.log("\nGracefully shutting down...".red);
+    console.log("\nShutting down server".red);
 
-    await mongoose.connection.close(false);
+    await mongoose.disconnect()
 
     server.close(() => {
-        console.log("Server closed".yellow);
+        console.log("Server closed".bgRed);
         process.exit(0);
     });
 };
