@@ -53,4 +53,51 @@ async function registerUser(req, res){
 
 }
 
-module.exports = {registerUser}
+async function loginUser(req,res){
+    try{
+        //collect data
+        const {email, password} = req.body
+
+        //check if user exits
+        const userExists = await userModel.findOne({email})
+
+        if(!userExists){
+            return res.status(401).json({
+                message : "Invalid credentials",
+                success : "false"
+            })
+        }
+
+        //check if password is correct
+        const isPasswordCorrect = await bcrypt.compare(password, userExists.password)
+
+        if(!isPasswordCorrect){
+            return res.status(401).json({
+                message : "Invalid credentials",
+                success : "true"
+            })
+        }
+
+
+        //generate token
+        const token = jwt.sign({
+            id : userExists._id,
+            role : userExists.role
+        }, process.env.JWT_SECRET, {expiresIn : "7d"})
+
+        //send success response
+        res.cookie("token", token)
+        res.status(200).json({
+            message : "User logged in successfully",
+            success : "true"
+        })
+    }
+    catch(error){
+        res.status(401).json({
+            message : "Error while logging in",
+            success : "false"
+        })
+    }
+}
+
+module.exports = {registerUser, loginUser}
