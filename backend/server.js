@@ -13,6 +13,7 @@ async function start() {
         await connectDB();
 
         server = app.listen(PORT, () => {
+            console.log("Server started".bgGreen)
             console.log(`Server is running at http://localhost:${PORT}`.yellow);
         });
 

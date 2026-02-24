@@ -2,6 +2,7 @@ const express = require("express")
 const cors = require("cors")
 const morgan = require("morgan")
 const authRoutes = require("./routes/auth.route")
+const productRoutes = require("./routes/product.route")
 
 const app = express()
 
@@ -17,6 +18,7 @@ app.get('/api/', (req, res) => {
     })
 })
 app.use('/api', authRoutes)
+app.use('/product', productRoutes)
 
 
 
