@@ -20,7 +20,7 @@ function ProductCard({ product }) {
         </p>
 
         <Link
-          to={`/product/${product._id}`}
+          to={`/product/getproducts/${product._id}`}
           className="inline-block mt-3 bg-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-indigo-600 transition"
         >
           View Details
