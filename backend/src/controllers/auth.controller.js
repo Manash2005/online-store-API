@@ -2,6 +2,8 @@ const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt")
 const userModel = require("../models/user.model")
 
+
+//Register User
 async function registerUser(req, res){
 
     try{
@@ -53,6 +55,7 @@ async function registerUser(req, res){
 
 }
 
+//Login User
 async function loginUser(req,res){
     try{
         //collect data
@@ -100,6 +103,8 @@ async function loginUser(req,res){
     }
 }
 
+
+//Logout User
 async function logoutUser(req, res) {
     try{
         //clear cookie

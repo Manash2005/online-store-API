@@ -1,5 +1,6 @@
 const productModel = require("../models/product.model")
 const mongoose = require("mongoose")
+const client = require("../config/imagekit")
 
 async function getAllProducts(req,res,next){
     try{
@@ -28,9 +29,16 @@ async function createProduct(req,res,next){
 
         //collect data
         const {title,description,price,seller} = req.body
+
+        const uploadedImage = await client.upload({
+            file: req.file.buffer.toString("base64"),
+            fileName: req.file.originalname,
+            folder: "/Store/Products"
+        });
         
         //create product
         const product = await productModel.create({
+            productImage: uploadedImage.url,
             title,
             description,
             price,
@@ -100,7 +108,7 @@ async function updateProduct(req, res) {
             });
         }
 
-        // 2Update product
+        // Update product
         const product = await productModel.findByIdAndUpdate(
             id,
             { title, description, price },
