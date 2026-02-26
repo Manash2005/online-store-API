@@ -30,10 +30,11 @@ async function createProduct(req,res,next){
         //collect data
         const {title,description,price,seller} = req.body
 
-        const uploadedImage = await client.upload({
+        // ImageKit SDK now exposes upload via the `files` namespace
+        const uploadedImage = await client.files.upload({
             file: req.file.buffer.toString("base64"),
             fileName: req.file.originalname,
-            folder: "/Store/Products"
+            folder: "/Store/Products",
         });
         
         //create product
