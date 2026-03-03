@@ -7,6 +7,7 @@ router.post("/create-product", upload.single("productImage"), prodcutController.
 router.get("/getproducts", prodcutController.getAllProducts)
 router.get("/getproducts/:id", prodcutController.getProduct)
 router.patch("/update-product/:id", prodcutController.updateProduct)
+router.delete("/delete-product/:id", prodcutController.deleteProduct)
 
 
 module.exports = router

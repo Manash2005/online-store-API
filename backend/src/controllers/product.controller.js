@@ -2,33 +2,33 @@ const productModel = require("../models/product.model")
 const mongoose = require("mongoose")
 const client = require("../config/imagekit")
 
-async function getAllProducts(req,res,next){
-    try{
+async function getAllProducts(req, res, next) {
+    try {
 
         //array of products
         const products = await productModel.find()
-        
+
         //return res
         return res.status(200).json({
-            message : "fetched all products",
-            success : "true",
+            message: "fetched all products",
+            success: "true",
             products
         })
     }
-    catch(error){
+    catch (error) {
         console.log(error)
         return res.status(401).json({
-            message : "Error while fetching products",
-            success : "false"
+            message: "Error while fetching products",
+            success: "false"
         })
     }
 }
 
-async function createProduct(req,res,next){
-    try{
+async function createProduct(req, res, next) {
+    try {
 
         //collect data
-        const {title,description,price,seller} = req.body
+        const { title, description, price, seller } = req.body
 
         // ImageKit SDK now exposes upload via the `files` namespace
         const uploadedImage = await client.files.upload({
@@ -36,7 +36,7 @@ async function createProduct(req,res,next){
             fileName: req.file.originalname,
             folder: "/Store/Products",
         });
-        
+
         //create product
         const product = await productModel.create({
             productImage: uploadedImage.url,
@@ -45,54 +45,54 @@ async function createProduct(req,res,next){
             price,
             seller
         })
-        
+
         //return res
         return res.status(201).json({
-            message : "New product created",
-            success : "true",
+            message: "New product created",
+            success: "true",
             product
         })
-    }catch(error){
+    } catch (error) {
         console.log(error)
         return res.status(401).json({
-            message : "Error while creating product",
-            success : "false",
+            message: "Error while creating product",
+            success: "false",
         })
     }
 }
 
-async function getProduct(req,res,next){
-     try{
+async function getProduct(req, res, next) {
+    try {
 
-        const {id} = req.params
+        const { id } = req.params
 
-         // Validate MongoDB ID
+        // Validate MongoDB ID
         if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(400).json({
-            message: "Invalid product ID"
-        });
+            return res.status(400).json({
+                message: "Invalid product ID"
+            });
         }
 
         const product = await productModel.findById(id)
-        if(!product){
+        if (!product) {
             return res.status(404).json({
-                message : "Product not found",
+                message: "Product not found",
             })
         }
 
-        
+
         //return res
         return res.status(200).json({
-            message : "fetched product",
-            success : "true",
+            message: "fetched product",
+            success: "true",
             product
         })
     }
-    catch(error){
+    catch (error) {
         console.log(error)
         return res.status(401).json({
-            message : "Error while fetching product",
-            success : "false"
+            message: "Error while fetching product",
+            success: "false"
         })
     }
 }
@@ -138,4 +138,28 @@ async function updateProduct(req, res) {
     }
 }
 
-module.exports = {createProduct,getProduct,getAllProducts,updateProduct}
+async function deleteProduct(req, res) {
+    try {
+        const { id } = req.params
+        const product = await productModel.findByIdAndDelete(id)
+        if (!product) {
+            return res.status(404).json({
+                message: "Product not found",
+            })
+        }
+        return res.status(200).json({
+            message: "Product deleted successfully",
+            success: "true",
+            product
+        })
+    }
+    catch (error) {
+        console.log(error)
+        return res.status(401).json({
+            message: "Error while deleting product",
+            success: "false"
+        })
+    }
+}
+
+module.exports = { createProduct, getProduct, getAllProducts, updateProduct, deleteProduct }
